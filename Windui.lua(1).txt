@@ -11053,8 +11053,8 @@ if not ar.IgnoreAlerts then
 ar:SetToTheCenter()
 ar:Dialog{
 
-Title="关闭塔菲",
-Content="确定要关闭塔菲吗?",
+Title="关闭AT",
+Content="确定要关闭AT吗?",
 Buttons={
 {
 Title="取消",
