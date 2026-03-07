@@ -1,0 +1,82 @@
+-- 引入所需的服务
+local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+
+-- 获取本地玩家及其界面容器
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- 创建一个函数来生成并播放弹窗
+local function showTaffyNotification()
+	-- 1. 创建主容器 ScreenGui
+	local screenGui = Instance.new("ScreenGui")
+	screenGui.Name = "TaffyNotificationGui"
+	screenGui.Parent = playerGui
+
+	-- 2. 创建弹窗背景 Frame (使用猛男/可爱粉色主题)
+	local frame = Instance.new("Frame")
+	frame.Size = UDim2.new(0, 320, 0, 60)
+	-- 初始位置：屏幕右上角，但在屏幕外（X的Scale为1表示屏幕最右侧，Offset加350完全隐藏在右侧）
+	frame.Position = UDim2.new(1, 350, 0, 30) 
+	frame.BackgroundColor3 = Color3.fromRGB(255, 240, 245) -- 薰衣草浅粉色
+	frame.BorderSizePixel = 0
+	frame.Parent = screenGui
+
+	-- 添加圆角 (让UI变美观)
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, 12)
+	corner.Parent = frame
+
+	-- 添加UI描边 (增加精致感)
+	local stroke = Instance.new("UIStroke")
+	stroke.Color = Color3.fromRGB(255, 150, 180) -- 较深的粉色描边
+	stroke.Thickness = 2
+	stroke.Parent = frame
+
+	-- 添加一点阴影效果 (用简单的ImageLabel模拟，或纯色背景)
+	-- 这里为了代码整洁，省略复杂阴影，靠描边已经很美观了
+
+	-- 3. 创建文本 TextLabel
+	local textLabel = Instance.new("TextLabel")
+	textLabel.Size = UDim2.new(1, -20, 1, 0) -- 留出边距
+	textLabel.Position = UDim2.new(0, 10, 0, 0)
+	textLabel.BackgroundTransparency = 1 -- 透明背景
+	textLabel.Text = "🐱 塔菲喵暂时不支持此服务器捏～"
+	textLabel.TextColor3 = Color3.fromRGB(100, 50, 80) -- 护眼的深紫红色
+	textLabel.Font = Enum.Font.GothamMedium -- 现代圆润字体
+	textLabel.TextSize = 16
+	textLabel.TextWrapped = true
+	textLabel.Parent = frame
+
+	-- 4. 设置动画 (补间)
+	-- 动画参数：耗时0.6秒，弹性滑出(Back)，方向Out
+	local tweenInfo = TweenInfo.new(
+		0.6, 
+		Enum.EasingStyle.Back, 
+		Enum.EasingDirection.Out
+	)
+
+	-- 进场动画：滑入屏幕内 (距离右边缘20像素)
+	local slideInGoal = { Position = UDim2.new(1, -340, 0, 30) }
+	local slideInTween = TweenService:Create(frame, tweenInfo, slideInGoal)
+
+	-- 退场动画：退回屏幕外 (改为使用稍缓和的动画)
+	local slideOutInfo = TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
+	local slideOutGoal = { Position = UDim2.new(1, 350, 0, 30) }
+	local slideOutTween = TweenService:Create(frame, slideOutInfo, slideOutGoal)
+
+	-- 5. 执行流程
+	slideInTween:Play() -- 播放进场动画
+
+	-- 使用 task.delay 异步等待 10 秒，不阻塞线程
+	task.delay(10, function()
+		slideOutTween:Play() -- 10秒后播放退场动画
+		
+		-- 等待退场动画播放完毕后，销毁UI释放内存
+		slideOutTween.Completed:Wait()
+		screenGui:Destroy()
+	end)
+end
+
+-- 调用函数测试
+showTaffyNotification()
