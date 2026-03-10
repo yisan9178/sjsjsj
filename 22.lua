@@ -2,7 +2,7 @@ local Notice = {
     {date = "2026-2-1", desc = "开始制作TF塔菲"},
 }
 local LoadServer = {
-    "俄亥俄州",
+    "力量传奇",
 
 }
 local LoadingSteps = {
