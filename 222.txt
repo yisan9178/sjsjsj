@@ -41,7 +41,7 @@ local function showTaffyNotification()
 	textLabel.Size = UDim2.new(1, -20, 1, 0) -- 留出边距
 	textLabel.Position = UDim2.new(0, 10, 0, 0)
 	textLabel.BackgroundTransparency = 1 -- 透明背景
-	textLabel.Text = "🐱 塔菲喵暂时不支持此服务器捏～"
+	textLabel.Text = "塔菲喵暂时不支持此服务器捏～"
 	textLabel.TextColor3 = Color3.fromRGB(100, 50, 80) -- 护眼的深紫红色
 	textLabel.Font = Enum.Font.GothamMedium -- 现代圆润字体
 	textLabel.TextSize = 16
